@@ -11,7 +11,7 @@ using WebApiKurs.Entities;
 namespace WebApiKurs.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("products/[controller]")]
     public class ProductController : ControllerBase
     {
         EfModel model;
@@ -53,7 +53,10 @@ namespace WebApiKurs.Controllers
         [HttpGet("{userid}")]
         public async Task<ActionResult<IEnumerable<Product>>>GetProducts(int userid)
         {
-            return await model.Products.Where(p => p.UserId == userid).ToListAsync();
+            Product product = await model.Products.Where(p => p.UserId == userid).FirstOrDefaultAsync();
+            if (product == null)
+                return NotFound();
+            return Ok(product);
         }
         [HttpPost]
         public async Task<ActionResult<Product>> PostProduct(Product product)
