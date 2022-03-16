@@ -11,7 +11,7 @@ using WebApiKurs.Entities;
 namespace WebApiKurs.Controllers
 {
     [ApiController]
-    [Route("products/[controller]")]
+    [Route("[controller]")]
     public class ProductController : ControllerBase
     {
         EfModel model;
@@ -69,7 +69,7 @@ namespace WebApiKurs.Controllers
             await  model.SaveChangesAsync();
             return Ok(product);
         }
-        [HttpPut]
+        [HttpPut("{Product}")]
         public async Task<ActionResult<Product>> PutProduct(Product product)
         {
             if(product == null)
@@ -80,7 +80,7 @@ namespace WebApiKurs.Controllers
             {
                 return NotFound();
             }
-            model.Update(product);
+            model.Products.Update(product);
             await model.SaveChangesAsync();
             return Ok(product);
         }

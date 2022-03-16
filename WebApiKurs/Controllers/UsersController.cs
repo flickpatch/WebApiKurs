@@ -10,7 +10,7 @@ using WebApiKurs.Entities;
 
 namespace WebApiKurs.Controllers
 {
-    [Route("users/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
     {
@@ -55,6 +55,18 @@ namespace WebApiKurs.Controllers
             }
             return NotFound(u);
         }
-
+        [HttpPut("{User}")]
+        public async Task<ActionResult<User>> ChangeUser(User user)
+        {
+            if(user == null)
+            {
+                return BadRequest();  
+            }
+            if (!model.Users.Any(u => u.Id == user.Id))
+                return NotFound();
+            model.Users.Update(user);
+            await model.SaveChangesAsync();
+            return Ok(user);
+        }
     }
 }

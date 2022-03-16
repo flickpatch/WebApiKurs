@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -35,6 +36,12 @@ namespace WebApiKurs
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebApiKurs", Version = "v1" });
             });
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(b=>
+            {
+                b.RequireHttpsMetadata = false;
+            }
+            
+            )
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -46,6 +53,7 @@ namespace WebApiKurs
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebApiKurs v1"));
             }
+            app.UseAuthentication();
 
             app.UseHttpsRedirection();
 
