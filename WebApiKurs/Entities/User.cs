@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace WebApiKurs.Entities
@@ -18,6 +19,7 @@ namespace WebApiKurs.Entities
         public string SecName { get; set; }
         [Required]
         public DateTime BirthDate { get; set; }
+        [JsonIgnore]
         public List<Product> Products { get; set; }
         [Required, MaxLength(64), EmailAddress]
         public string Email { get; set; }
@@ -25,6 +27,7 @@ namespace WebApiKurs.Entities
         public string Login { get; set; }
         [Required, MaxLength(64)]
         public string Pass { get; set; }
+        public byte[] Photo { get; set; }
         public User()
         {
             Products = new List<Product>();

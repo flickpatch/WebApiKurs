@@ -19,12 +19,12 @@ namespace WebApiKurs.Controllers
         {
             model = efmodel;
         }
-        [HttpGet]
+       /* [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
             return await model.Users.ToListAsync();
-        }
-        [HttpPost]
+        }*/
+        [HttpPost("{user}")]
         public async Task<ActionResult<User>> AddUser(User user)
         {
             if(user == null)
