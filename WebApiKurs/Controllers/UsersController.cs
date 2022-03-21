@@ -13,7 +13,7 @@ namespace WebApiKurs.Controllers
     [Route("[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
-    {
+    { 
         EfModel model;
         public UsersController(EfModel efmodel)
         {
@@ -24,7 +24,7 @@ namespace WebApiKurs.Controllers
         {
             return await model.Users.ToListAsync();
         }*/
-        [HttpPost("{user}")]
+        [HttpPost]
         public async Task<ActionResult<User>> AddUser(User user)
         {
             if(user == null)
