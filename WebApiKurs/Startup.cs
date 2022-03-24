@@ -37,14 +37,14 @@ namespace WebApiKurs
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebApiKurs", Version = "v1" });
-                c.AddSecurityDefinition("barerAuth", new OpenApiSecurityScheme
+                c.AddSecurityDefinition("bearerAuth", new OpenApiSecurityScheme
                 {
                     Name= "Authorization",
                     Type = SecuritySchemeType.Http,
                     Scheme = "bearer",
                     BearerFormat = "JWT",
                     In = ParameterLocation.Header,
-                    Description = "JWT Authorization header using the Barer scheme."
+                    Description = "JWT Authorization header using the Bearer scheme."
                 });
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement()
                 {
@@ -65,7 +65,7 @@ namespace WebApiKurs
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(b =>
             {
                 b.RequireHttpsMetadata = false;
-                b.TokenValidationParameters = new TokenValidationParameters()
+                b.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateAudience = true,
                     ValidAudience = TokenGenerate.AUDINCE,
@@ -88,11 +88,12 @@ namespace WebApiKurs
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebApiKurs v1"));
             }
-            app.UseAuthentication();
 
             app.UseHttpsRedirection();
 
-            app.UseRouting();
+            app.UseRouting(); 
+            app.UseAuthentication();
+
 
             app.UseAuthorization();
 

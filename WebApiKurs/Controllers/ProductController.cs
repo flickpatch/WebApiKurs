@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using WebApiKurs.Connection;
 using WebApiKurs.Entities;
@@ -38,17 +40,22 @@ namespace WebApiKurs.Controllers
                 model.Products.Add(new Product()
                 {
                     Id = 1,
-                    Name= "d", DateCreate = new DateTime(2003,02,03), Description="dsadasdasdasdsadhsahdhjsddhjdshjjhksdjhkdsajkhdsajhkdsajkhdsahjksadjkhd", IsActivity = true, UserId = 1 
-                }
+                    Name= "d", Price=3500,  DateCreate = new DateTime(2003,02,03), Type= "Авто", Description="dsadasdasdasdsadhsahdhjsddhjdshjjhksdjhkdsajkhdsajhkdsajkhdsahjksadjkhd", IsActivity = true, UserId = 1 
+                } 
 
                     );
             }
             model.SaveChanges();
         }
-       [HttpGet]
+
+        [Authorize]
+        [HttpGet]       
        public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
         {
-            return await model.Products.ToListAsync();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            if (identity == null)
+                throw new Exception("notautorized");
+            return await model.Products.Include(p=>p.Photos).ToListAsync();
         }
         [HttpGet("{userid}")]
         public async Task<ActionResult<IEnumerable<Product>>>GetProducts(int userid)

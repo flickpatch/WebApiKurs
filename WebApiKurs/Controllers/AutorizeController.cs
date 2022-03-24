@@ -28,8 +28,13 @@ namespace WebApiKurs.Controllers
             var identy = GetIdentity(login, pass);
             if (identy == null)
                 return BadRequest();
-            var now = DateTime.Now;
-            var jwt = new JwtSecurityToken(audience: TokenGenerate.AUDINCE, issuer: TokenGenerate.ISSUER, notBefore: now, claims: identy.Claims, expires: now.Add(TimeSpan.FromMinutes(TokenGenerate.LifeTime)),
+            var now = DateTime.UtcNow;
+            var jwt = new JwtSecurityToken(
+                audience: TokenGenerate.AUDINCE, 
+                issuer: TokenGenerate.ISSUER, 
+                notBefore: now, 
+                claims: identy.Claims, 
+                expires: now.Add(TimeSpan.FromMinutes(TokenGenerate.LifeTime)),
                 signingCredentials: new SigningCredentials(TokenGenerate.GenerateKey(), SecurityAlgorithms.HmacSha256));
             var encodedJWT = new JwtSecurityTokenHandler().WriteToken(jwt);
             var response = new
