@@ -65,6 +65,7 @@ namespace WebApiKurs.Controllers
                 return NotFound();
             return Ok(product);
         }
+        
         [HttpPost]
         public async Task<ActionResult<Product>> PostProduct(Product product)
         {
@@ -102,6 +103,21 @@ namespace WebApiKurs.Controllers
             model.Products.Remove(p);
             await model.SaveChangesAsync();
             return Ok(p);
+        }
+        [Authorize]
+        [HttpPost("{product}")]
+        public async Task<ActionResult<Product>> AddUserProduct(Product product, int id)
+        {
+            if (product == null)
+                return BadRequest();
+            product.DateCreate = DateTime.Now;
+            product.IsActivity = true;
+            product.UserId = id;
+            product.User = model.Users.Find(id);
+            model.Products.Add(product);
+             await model.SaveChangesAsync();
+            return Ok(product);
+
         }
     }
 }

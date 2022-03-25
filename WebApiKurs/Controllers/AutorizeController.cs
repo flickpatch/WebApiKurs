@@ -17,6 +17,7 @@ namespace WebApiKurs.Controllers
     [ApiController]
     public class AutorizeController : ControllerBase
     {
+        int Id;
         EfModel model;
         public AutorizeController(EfModel efmodel)
         {
@@ -39,6 +40,7 @@ namespace WebApiKurs.Controllers
             var encodedJWT = new JwtSecurityTokenHandler().WriteToken(jwt);
             var response = new
             {
+                id = Id, 
                 access_token = encodedJWT,
                 username = identy.Name
             };
@@ -49,6 +51,7 @@ namespace WebApiKurs.Controllers
         private ClaimsIdentity GetIdentity(string login, string pass)
         {
             User user = model.Users.FirstOrDefault(u => u.Login == login && u.Pass == pass);
+            Id = user.Id;
             if(user!=null)
             {
                 var claims = new List<Claim>
