@@ -51,9 +51,9 @@ namespace WebApiKurs.Controllers
         private ClaimsIdentity GetIdentity(string login, string pass)
         {
             User user = model.Users.FirstOrDefault(u => u.Login == login && u.Pass == pass);
-            Id = user.Id;
             if(user!=null)
             {
+                Id = user.Id;
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimsIdentity.DefaultNameClaimType, user.Name),

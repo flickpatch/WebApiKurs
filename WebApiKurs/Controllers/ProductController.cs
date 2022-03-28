@@ -51,18 +51,16 @@ namespace WebApiKurs.Controllers
         [Authorize]
         [HttpGet]       
        public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
-        {
-            var identity = HttpContext.User.Identity as ClaimsIdentity;
-            if (identity == null)
-                throw new Exception("notautorized");
-            return await model.Products.Include(p=>p.Photos).ToListAsync();
+        {            
+            return await model.Products.ToListAsync();
         }
+        [Authorize]
         [HttpGet("{userid}")]
         public async Task<ActionResult<IEnumerable<Product>>>GetProducts(int userid)
         {
             Product product = await model.Products.Where(p => p.UserId == userid).FirstOrDefaultAsync();
             if (product == null)
-                return NotFound();
+                return null;
             return Ok(product);
         }
         

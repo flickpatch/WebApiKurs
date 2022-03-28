@@ -21,18 +21,14 @@ namespace WebApiKurs.Entities
         [Required]
         public bool IsActivity { get; set; }
         [Required]
-        public int Price { get; set; }
-        [Required]
-        public List<Photo> Photos { get; set; }
+        public int Price { get; set; }        
+        public byte[] Photo { get; set; }       
         [Required]
         public int UserId { get; set; }
         [Required, MaxLength(48)]
         public string Type { get; set; }
         [ForeignKey("UserId")]
         public virtual User User { get; set; }
-        public Product()
-        {
-            Photos = new List<Photo>();
-        }
+       
     }
 }

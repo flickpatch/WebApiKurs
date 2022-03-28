@@ -15,6 +15,5 @@ namespace WebApiKurs.Connection
         }
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<User> Users { get; set; }
-        public virtual DbSet<Photo> Photos { get; set; }
     }
 }
