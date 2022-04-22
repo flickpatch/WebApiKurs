@@ -49,21 +49,50 @@ namespace WebApiKurs.Controllers
         }
 
         [Authorize]
-        [HttpGet]       
-       public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
+        [HttpGet("id={id}")]       
+       public async Task<ActionResult<IEnumerable<Product>>> GetProducts(int id)
         {            
-            return await model.Products.ToListAsync();
+            return await model.Products.Where(p=> p.UserId!= id).ToListAsync();
         }
         [Authorize]
         [HttpGet("{userid}")]
-        public async Task<ActionResult<IEnumerable<Product>>>GetProducts(int userid)
+        public async Task<ActionResult<IEnumerable<Product>>> GetYoueProducts(int userid)
         {
-            Product product = await model.Products.Where(p => p.UserId == userid).FirstOrDefaultAsync();
-            if (product == null)
+            List<Product> products = await model.Products.Where(p => p.UserId == userid).ToListAsync();
+            if (products == null)
                 return null;
-            return Ok(product);
+            return products;
         }
-        
+        [HttpGet("{search")]
+        public async Task<ActionResult<IEnumerable<Product>>> GetProductsFromSearch(string search)
+        {
+            List<Product> products = await model.Products.Where(a => GetLeveshtain(search, a.Name) <= 3).ToListAsync();
+            return products;
+        }
+        private int GetLeveshtain(string search, string check)
+        {
+            var n = search.Length + 1;
+            var m = check.Length + 1;
+            int[,] mat = new int[n, m];
+            for (int i = 0; i < n; i++)
+            {
+                mat[i, 0] = i;
+            }
+            for (int j = 0; j < m; j++)
+            {
+                mat[0, j] = j;
+            }
+            for (int a = 1; a < n; a++)
+            {
+                for (int b = 1; b < m; b++)
+                {
+                    int raz = search[a - 1] == check[b - 1] ? 0 : 1;
+                    mat[a, b] = Math.Min(Math.Min(mat[a - 1, b] + 1, mat[a, b - 1] + 1), mat[a - 1, b - 1] + raz);
+                }
+            }
+            return mat[n - 1, m - 1];
+        }
+
         [HttpPost]
         public async Task<ActionResult<Product>> PostProduct(Product product)
         {
