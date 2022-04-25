@@ -49,7 +49,7 @@ namespace WebApiKurs.Controllers
         }
 
         [Authorize]
-        [HttpGet("id={id}")]       
+        [HttpGet("id/{id}")]       
        public async Task<ActionResult<IEnumerable<Product>>> GetProducts(int id)
         {            
             return await model.Products.Where(p=> p.UserId!= id).ToListAsync();
@@ -63,11 +63,15 @@ namespace WebApiKurs.Controllers
                 return null;
             return products;
         }
-        [HttpGet("{search")]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProductsFromSearch(string search)
+        [Authorize]
+        [HttpGet("/search/{search}/{userid}")]
+        public async Task<ActionResult<IEnumerable<Product>>> GetProductsFromSearch(string search, int userid)
         {
-            List<Product> products = await model.Products.Where(a => GetLeveshtain(search, a.Name) <= 3).ToListAsync();
-            return products;
+            List<Product> products = await model.Products.ToListAsync();
+            products = products.Where(p => (p.Name.Contains(search) || GetLeveshtain(search, p.Name) <= 3) && p.UserId != userid).ToList();
+            if (products == null)
+                return  null; 
+            return  products;
         }
         private int GetLeveshtain(string search, string check)
         {
