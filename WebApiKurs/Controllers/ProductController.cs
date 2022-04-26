@@ -52,26 +52,26 @@ namespace WebApiKurs.Controllers
         [HttpGet("id/{id}")]       
        public async Task<ActionResult<IEnumerable<Product>>> GetProducts(int id)
         {            
-            return await model.Products.Where(p=> p.UserId!= id).ToListAsync();
+            return await model.Products.Where(p=> p.UserId!= id).Include(p=> p.User).ToListAsync();
         }
         [Authorize]
         [HttpGet("{userid}")]
         public async Task<ActionResult<IEnumerable<Product>>> GetYoueProducts(int userid)
         {
-            List<Product> products = await model.Products.Where(p => p.UserId == userid).ToListAsync();
+            List<Product> products = await model.Products.Where(p => p.UserId == userid).Include(p => p.User).ToListAsync();
             if (products == null)
                 return null;
             return products;
         }
         [Authorize]
-        [HttpGet("/search/{search}/{userid}")]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProductsFromSearch(string search, int userid)
+        [HttpGet("/search/{search}/")]
+        public async Task<ActionResult<IEnumerable<Product>>> GetProductsFromSearch(string search)
         {
-            List<Product> products = await model.Products.ToListAsync();
-            products = products.Where(p => (p.Name.Contains(search) || GetLeveshtain(search, p.Name) <= 3) && p.UserId != userid).ToList();
+            List<Product> products = await model.Products.Include(p => p.User).ToListAsync();
+            products = products.Where(p => p.Name.Contains(search) || GetLeveshtain(search, p.Name) <= 3).ToList();
             if (products == null)
                 return  null; 
-            return  products;
+            return products;
         }
         private int GetLeveshtain(string search, string check)
         {
