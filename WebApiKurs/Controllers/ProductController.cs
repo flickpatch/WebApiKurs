@@ -150,5 +150,37 @@ namespace WebApiKurs.Controllers
             return Ok(product);
 
         }
+        [Authorize]
+        [HttpGet("iduser/{userid}")]
+        public async Task<ActionResult<IEnumerable<Product>>> GetLikedProducts(int userid)
+        {
+            List<Product> products = await model.Products.Include(p => p.Likes).ThenInclude(l => l.user).ToListAsync();
+            products = products.Where(p => p.Likes.Where(l => l.UserID == userid).ToList() != null).ToList();
+            if (products == null)
+                return null;
+            return products;
+        }
+        [Authorize]
+        [HttpPost("userid/{id}/productid/{Productid}")]
+        public async Task<ActionResult<Product>> LikeProduct(int id, int Productid)
+        {
+            Product p = model.Products.Where(p => p.Id == Productid).FirstOrDefault();
+            User u = model.Users.Where(u => u.Id == id).FirstOrDefault();
+            if (p != null && u != null)
+            {
+                model.Likes.Add(new Like()
+                {
+                    IsLiked = true,
+                    ProductId = Productid,
+                    product = p,
+                    UserID = id,
+                    user = u
+                });
+                model.SaveChanges();
+                return Ok();
+            }
+            else
+                return BadRequest();
+        }
     }
 }

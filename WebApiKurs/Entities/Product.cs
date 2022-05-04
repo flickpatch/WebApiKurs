@@ -29,6 +29,11 @@ namespace WebApiKurs.Entities
         public string Type { get; set; }
         [ForeignKey("UserId")]
         public virtual User User { get; set; }
+        public virtual List<Like> Likes { get; set; }
+        public Product()
+        {
+            Likes = new List<Like>();
+        }
        
     }
 }

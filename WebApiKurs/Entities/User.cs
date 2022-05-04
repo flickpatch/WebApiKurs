@@ -28,9 +28,11 @@ namespace WebApiKurs.Entities
         [Required, MaxLength(64)]
         public string Pass { get; set; }
         public byte[] Photo { get; set; }
+        public virtual List<Like> Likes { get; set; }
         public User()
         {
             Products = new List<Product>();
+            Likes = new List<Like>();
         }
     }
 }
