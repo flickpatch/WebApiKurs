@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace WebApiKurs.Entities
@@ -29,6 +30,7 @@ namespace WebApiKurs.Entities
         public string Type { get; set; }
         [ForeignKey("UserId")]
         public virtual User User { get; set; }
+        [JsonIgnore]
         public virtual List<Like> Likes { get; set; }
         public Product()
         {

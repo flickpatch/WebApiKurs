@@ -136,7 +136,7 @@ namespace WebApiKurs.Controllers
             return Ok(p);
         }
         [Authorize]
-        [HttpPost("{product}")]
+        [HttpPost("{product}/{id}")]
         public async Task<ActionResult<Product>> AddUserProduct(Product product, int id)
         {
             if (product == null)
